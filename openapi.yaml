@@ -1,0 +1,49 @@
+openapi: 3.1.0
+info:
+  title: Lululemon Review Retriever
+  version: 0.1.0
+  description: Retrieve complete public review corpora from lululemon product URLs for downstream research analysis.
+servers:
+  - url: https://YOUR-DEPLOYED-DOMAIN
+paths:
+  /v1/lululemon/reviews:
+    post:
+      operationId: fetchLululemonReviews
+      summary: Fetch all accessible reviews for one or more lululemon product URLs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [urls]
+              properties:
+                urls:
+                  type: array
+                  minItems: 1
+                  maxItems: 10
+                  items:
+                    type: string
+                    format: uri
+      responses:
+        '200':
+          description: Review corpora and retrieval coverage
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url: {type: string}
+                        product_name_id: {type: [string, 'null']}
+                        total_results: {type: integer}
+                        reviews_retrieved: {type: integer}
+                        coverage: {type: number}
+                        reviews:
+                          type: array
+                          items: {type: object, additionalProperties: true}
+                        error: {type: [string, 'null']}
