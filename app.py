@@ -191,11 +191,11 @@ async def _fetch_all_reviews(page, template: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-async def retrieve_one(url: str) -> ProductResult:
-browser_args = [
-    "--disable-blink-features=AutomationControlled",
-    "--disable-http2",
-    "--disable-quic",
+    async def retrieve_one(url: str) -> ProductResult:
+        browser_args = [
+            "--disable-blink-features=AutomationControlled",
+            "--disable-http2",
+            "--disable-quic",
 ]
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, args=browser_args)
@@ -208,8 +208,8 @@ browser_args = [
         )
         page = await context.new_page()
         try:
-await page.goto(url, wait_until="commit", timeout=60000)
-await page.wait_for_timeout(3000)
+            await page.goto(url, wait_until="commit", timeout=60000)
+            await page.wait_for_timeout(3000)
             template = await _capture_getreviews_template(page)
             fetched = await _fetch_all_reviews(page, template)
             total = int(fetched["total_results"])
